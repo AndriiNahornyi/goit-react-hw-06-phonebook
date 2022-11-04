@@ -1,4 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addContactAction,
+  removeContactAction,
+} from 'redux/contactList/action.contactList';
 import { ContactsForm } from '../ContactsForm';
 import { Filter } from '../Filter';
 import { ContactList } from '../ContactList';
@@ -8,19 +13,22 @@ import css from '../App/App.module.css';
 const CONTACT_LIST_LOCAL_KEY = 'contact-list-local';
 
 export const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const localeContactList = localStorage.getItem(CONTACT_LIST_LOCAL_KEY);
-    if (localeContactList) {
-      return JSON.parse(localeContactList);
-    }
-    return [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ];
-  });
-  const [filter, setFilter] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contactList);
+  const filter = useSelector(state => state.filter);
+  // const [contacts, setContacts] = useState(() => {
+  //   const localeContactList = localStorage.getItem(CONTACT_LIST_LOCAL_KEY);
+  //   if (localeContactList) {
+  //     return JSON.parse(localeContactList);
+  //   }
+  //   return [
+  //     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  //     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  //     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  //     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  //   ];
+  // });
+  // const [filter, setFilter] = useState('');
   //  Лінива ініціалізація стану => на стор. 12-16
   //    componentDidMount() {
   //      const localeContactList = localStorage.getItem(CONTACT_LIST_LOCAL_KEY);
@@ -36,13 +44,14 @@ export const App = () => {
   }, [contacts]);
 
   const handleSubmit = (name, number) => {
-    if (contacts.some(contact => contact.name === name)) {
-      return alert(`${name} is already in contacts`);
-    }
-    setContacts(prevState => [
-      ...prevState,
-      { name: name, id: nanoid(), number: number },
-    ]);
+    // if (contacts.some(contact => contact.name === name)) {
+    //   return alert(`${name} is already in contacts`);
+    // }
+    // setContacts(prevState => [
+    //   ...prevState,
+    //   { name: name, id: nanoid(), number: number },
+    // ]);
+    dispatch(addContactAction({ name: name, id: nanoid(), number: number }));
   };
   // useEffect(() => {
   const getFilterContacts = () => {
@@ -55,12 +64,13 @@ export const App = () => {
   //   setFilter([...getFilterContacts]);
   // }, [contacts, filter]);
 
-  const handleChange = e => {
-    const { value } = e.currentTarget;
-    setFilter(value);
-  };
+  // const handleChange = e => {
+  //   const { value } = e.currentTarget;
+  //   setFilter(value);
+  // };
   const handleDeleteContact = id => {
-    setContacts(prevState => prevState.filter(contact => contact.id !== id));
+    dispatch(removeContactAction(id));
+    // setContacts(prevState => prevState.filter(contact => contact.id !== id));
   };
   return (
     <div>
@@ -69,7 +79,9 @@ export const App = () => {
 
       <h2 className={css.appTitle}>Contacts</h2>
 
-      <Filter handleFilter={handleChange} filter={filter} />
+      <Filter
+      // handleFilter={handleChange} filter={filter}
+      />
       <ContactList
         filterContacts={getFilterContacts()}
         handleDeleteContact={handleDeleteContact}
