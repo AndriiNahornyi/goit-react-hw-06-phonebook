@@ -1,10 +1,9 @@
-// import PropTypes from 'prop-types';
-import { filterContactAction } from 'redux/filter/action.filter';
 import { useDispatch, useSelector } from 'react-redux';
+import { filterContactAction } from 'redux/filter/slice.filter';
 import css from './Filter.module.css';
 export const Filter = () => {
   const dispatch = useDispatch();
-  const value = useSelector(state => state.filter);
+  const value = useSelector(state => state.filter.filter);
   const filterContact = event => {
     const { value } = event.currentTarget;
     dispatch(filterContactAction(value));
@@ -23,8 +22,3 @@ export const Filter = () => {
     </label>
   );
 };
-
-// Filter.propTypes = {
-//   handleFilter: PropTypes.func.isRequired,
-//   filter: PropTypes.string.isRequired,
-// };

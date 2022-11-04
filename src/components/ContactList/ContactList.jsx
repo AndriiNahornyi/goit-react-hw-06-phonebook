@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import css from './ContactList.module.css';
 export const ContactList = ({ filterContacts, handleDeleteContact }) => {
   return (
@@ -20,13 +20,13 @@ export const ContactList = ({ filterContacts, handleDeleteContact }) => {
     </ul>
   );
 };
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.number.isRequired,
-    })
-  ),
-  handleDeleteContact: PropTypes.func.isRequired,
-};
+// ContactList.propTypes = {
+//   contacts: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.number.isRequired,
+//       name: PropTypes.string.isRequired,
+//       number: PropTypes.number.isRequired,
+//     })
+//   ),
+//   handleDeleteContact: PropTypes.func.isRequired,
+// };

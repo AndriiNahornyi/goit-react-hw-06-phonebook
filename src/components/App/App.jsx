@@ -1,76 +1,22 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addContactAction,
-  removeContactAction,
-} from 'redux/contactList/action.contactList';
 import { ContactsForm } from '../ContactsForm';
 import { Filter } from '../Filter';
 import { ContactList } from '../ContactList';
 import { nanoid } from 'nanoid';
 import css from '../App/App.module.css';
-
-const CONTACT_LIST_LOCAL_KEY = 'contact-list-local';
+import { addContact, removeContact } from 'redux/contactList/slice.contactList';
+import { getFilterContacts } from 'redux/selectors';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contactList);
-  const filter = useSelector(state => state.filter);
-  // const [contacts, setContacts] = useState(() => {
-  //   const localeContactList = localStorage.getItem(CONTACT_LIST_LOCAL_KEY);
-  //   if (localeContactList) {
-  //     return JSON.parse(localeContactList);
-  //   }
-  //   return [
-  //     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  //     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  //     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  //     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  //   ];
-  // });
-  // const [filter, setFilter] = useState('');
-  //  Лінива ініціалізація стану => на стор. 12-16
-  //    componentDidMount() {
-  //      const localeContactList = localStorage.getItem(CONTACT_LIST_LOCAL_KEY);
-  //      if (localeContactList) {
-  //        this.setState({ contacts: JSON.parse(localeContactList) });
-  //      }
-  //    }
-  useEffect(() => {
-    window.localStorage.setItem(
-      CONTACT_LIST_LOCAL_KEY,
-      JSON.stringify(contacts)
-    );
-  }, [contacts]);
+  const contacts = useSelector(getFilterContacts);
 
   const handleSubmit = (name, number) => {
-    // if (contacts.some(contact => contact.name === name)) {
-    //   return alert(`${name} is already in contacts`);
-    // }
-    // setContacts(prevState => [
-    //   ...prevState,
-    //   { name: name, id: nanoid(), number: number },
-    // ]);
-    dispatch(addContactAction({ name: name, id: nanoid(), number: number }));
+    dispatch(addContact({ name: name, id: nanoid(), number: number }));
   };
-  // useEffect(() => {
-  const getFilterContacts = () => {
-    return contacts.filter(contact =>
-      contact.name
-        .toLocaleLowerCase()
-        .includes(filter.trim().toLocaleLowerCase())
-    );
-  };
-  //   setFilter([...getFilterContacts]);
-  // }, [contacts, filter]);
 
-  // const handleChange = e => {
-  //   const { value } = e.currentTarget;
-  //   setFilter(value);
-  // };
   const handleDeleteContact = id => {
-    dispatch(removeContactAction(id));
-    // setContacts(prevState => prevState.filter(contact => contact.id !== id));
+    dispatch(removeContact(id));
   };
   return (
     <div>
@@ -79,11 +25,9 @@ export const App = () => {
 
       <h2 className={css.appTitle}>Contacts</h2>
 
-      <Filter
-      // handleFilter={handleChange} filter={filter}
-      />
+      <Filter />
       <ContactList
-        filterContacts={getFilterContacts()}
+        filterContacts={contacts}
         handleDeleteContact={handleDeleteContact}
       />
     </div>
