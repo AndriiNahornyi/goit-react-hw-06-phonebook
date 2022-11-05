@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import css from './ContactsForm.module.css';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'redux/contactList/slice.contactList';
+import { nanoid } from 'nanoid';
 
-export const ContactsForm = ({ handleSubmit }) => {
+export const ContactsForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const dispatch = useDispatch();
 
   const handleChange = e => {
     const { name, value } = e.currentTarget;
@@ -21,7 +24,7 @@ export const ContactsForm = ({ handleSubmit }) => {
   };
   const onSubmit = e => {
     e.preventDefault();
-    handleSubmit(name, number);
+    dispatch(addContact({ name: name, id: nanoid(), number: number }));
     e.target.reset();
     //Alternative
     // setName('');
@@ -68,8 +71,4 @@ export const ContactsForm = ({ handleSubmit }) => {
       </button>
     </form>
   );
-};
-
-ContactsForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
 };
